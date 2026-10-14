@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:InversionEnPozo.Movil.VistasModelos"
+             x:Class="InversionEnPozo.Movil.Vistas.DetalleProyectoPage"
+             Title="Detalle del Proyecto">
+
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="15">
+            <!-- Información general del proyecto -->
+            <Label Text="{Binding Proyecto.Titulo}" FontSize="22" FontAttributes="Bold" TextColor="#1E3A8A"/>
+            <Label Text="{Binding Proyecto.Descripcion}" FontSize="14" TextColor="DimGray"/>
+
+            <Frame BackgroundColor="White" BorderColor="#E5E7EB" CornerRadius="10" Padding="15">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Indicadores de Financiamiento" FontAttributes="Bold" FontSize="16" TextColor="#374151"/>
+
+                    <HorizontalStackLayout Spacing="5">
+                        <Label Text="Presupuesto Total:" FontSize="13" TextColor="Gray"/>
+                        <Label Text="{Binding Proyecto.CostoTotal, StringFormat='${0:N0}'}" FontSize="13" FontAttributes="Bold" TextColor="#2563EB"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="5">
+                        <Label Text="Monto Recaudado:" FontSize="13" TextColor="Gray"/>
+                        <Label Text="{Binding Proyecto.MontoRecaudado, StringFormat='${0:N0}'}" FontSize="13" FontAttributes="Bold" TextColor="#10B981"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Label Text="Hitos de Obra y Desembolsos" FontSize="18" FontAttributes="Bold" TextColor="#1E3A8A" Margin="0,10,0,0"/>
+
+            <!-- Simulación de Hito / Solicitud de Desembolso -->
+            <Frame BackgroundColor="White" BorderColor="#E5E7EB" CornerRadius="10" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Hito 1: Cimientos y Estructura" FontAttributes="Bold" FontSize="15" TextColor="#374151"/>
+                    <Label Text="Estado: Pendiente de aprobación" FontSize="13" TextColor="Gray"/>
+
+                    <Button Text="Solicitar Desembolso (Blockchain)" 
+                            Command="{Binding SolicitarDesembolsoCommand}"
+                            BackgroundColor="#2563EB" 
+                            TextColor="White" 
+                            CornerRadius="8" 
+                            HeightRequest="45"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Resultado o Estado del Hito -->
+            <Label Text="{Binding EstadoHito}" TextColor="DimGray" LineBreakMode="WordWrap"/>
+
+            <!-- Botón para ver en Etherscan -->
+            <Button Text="Ver Transacción en Etherscan (Sepolia)"
+                    Command="{Binding VerTransaccionCommand}"
+                    CommandParameter="{Binding HashTransaccionHito}"
+                    BackgroundColor="#3B82F6"
+                    TextColor="White"
+                    CornerRadius="8"
+                    HeightRequest="45"
+                    Margin="0,10,0,0"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

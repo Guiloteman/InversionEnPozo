@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="InversionEnPozo.Movil.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:InversionEnPozo.Movil.Vistas"
+    FlyoutBehavior="Flyout"
+    FlyoutWidth="280">
+
+    <Shell.FlyoutHeader>
+        <Grid BackgroundColor="#37474F" Padding="15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <VerticalStackLayout Spacing="5" VerticalOptions="Center">
+                <Image Source="logo.png" 
+                       WidthRequest="50" 
+                       HeightRequest="50" 
+                       Aspect="AspectFit" 
+                       HorizontalOptions="Start" />
+                <Label Text="Inversión en Pozo" 
+                       TextColor="White" 
+                       FontSize="14" 
+                       FontAttributes="Bold" />
+            </VerticalStackLayout>
+
+            <!-- Botón de cierre manual para el menú lateral -->
+            <Button Grid.Column="1"
+                    Text="✕"
+                    TextColor="White"
+                    BackgroundColor="Transparent"
+                    FontSize="18"
+                    VerticalOptions="Center"
+                    Clicked="OnCerrarMenuClicked" />
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <!-- 1. Pantalla de Login (Inicio) -->
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate local:LoginPage}"
+        Route="LoginPage"
+        x:Name="MenuLogin"
+        FlyoutItemIsVisible="False" />
+
+    <!-- Panel Constructora (Oculto al inicio) -->
+    <ShellContent
+        x:Name="MenuConstructora"
+        Title="Panel Constructora"
+        ContentTemplate="{DataTemplate local:ConstructoraMainPage}"
+        Route="ConstructoraMainPage"
+        IsVisible="False" />
+
+    <!-- Panel Inversionista (Oculto al inicio) -->
+    <ShellContent
+        x:Name="MenuInversionista"
+        Title="Panel Inversionista"
+        ContentTemplate="{DataTemplate local:InversionistaMainPage}"
+        Route="InversionistaMainPage"
+        IsVisible="False" />
+
+    <!-- Smart Contracts (Oculto al inicio) -->
+    <ShellContent
+        x:Name="MenuContrato"
+        Title="Generar Contrato y Proyecto"
+        ContentTemplate="{DataTemplate local:ContratoPage}"
+        Route="ContratoPage"
+        IsVisible="False" />
+
+    <!-- Botón de Cerrar Sesión en el menú lateral -->
+    <MenuItem Text="Cerrar Sesión" 
+              Clicked="OnCerrarSesionClicked" 
+              IconImageSource="dotnet_bot.png" />
+
+</Shell>

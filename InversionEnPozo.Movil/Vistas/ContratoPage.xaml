@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="InversionEnPozo.Movil.Vistas.ContratoPage"
+             Title="Simulador de Contrato Inteligente">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Gestión de Inversión en Pozo"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Sección Creación de Proyecto -->
+            <Frame BorderColor="#CCCCCC" CornerRadius="10" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Registrar Proyecto (Constructora)" FontAttributes="Bold" />
+
+                    <Entry Placeholder="Nombre del Proyecto" 
+               Text="{Binding NombreProyecto}" />
+
+                    <!-- Agregado el campo Descripción -->
+                    <Entry Placeholder="Descripción del Proyecto" 
+               Text="{Binding Descripcion}" />
+
+                    <Entry Placeholder="Presupuesto Total" 
+               Keyboard="Numeric" 
+               Text="{Binding PresupuestoTotal}" />
+
+                    <Button Text="Desplegar Contrato Génesis" 
+                Command="{Binding CrearProyectoCommand}" 
+                BackgroundColor="#512BD4" 
+                TextColor="White" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Resultado del Hash del Contrato -->
+            <Label Text="{Binding ResultadoHash}" 
+                   TextColor="DimGray" 
+                   LineBreakMode="WordWrap" />
+
+            <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" Margin="0,10" />
+
+            <!-- Sección Hitos de Obra y Liberación de Fondos -->
+            <Frame BorderColor="#CCCCCC" CornerRadius="10" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Validación de Hitos de Obra" FontAttributes="Bold" />
+                    <Label Text="Realiza la inspección y liberación automática proporcional de fondos." FontSize="12" TextColor="Gray" />
+
+                    <Button Text="Aprobar Hito 1 y Liberar Fondos" 
+                            Command="{Binding AprobarHitoCommand}" 
+                            BackgroundColor="#2B86D4" 
+                            TextColor="White" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Resultado de la Transacción del Hito -->
+            <Label Text="{Binding EstadoHito}" 
+                   TextColor="DimGray" 
+                   LineBreakMode="WordWrap" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

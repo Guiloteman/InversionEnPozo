@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="InversionEnPozo.Api/InversionEnPozo.Api.csproj" />
+  <Project Path="InversionEnPozo.Movil/InversionEnPozo.Movil.csproj" />
+</Solution>
