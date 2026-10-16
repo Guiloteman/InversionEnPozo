@@ -47,10 +47,14 @@ namespace InversionEnPozo.Movil.VistasModelos
 
         public bool IsNotBusy => !IsBusy;
 
+        [ObservableProperty]
+        private bool esNoRegistro = true;
+
         partial void OnEsRegistroChanged(bool value)
         {
             TextoBotonPrincipal = value ? "Registrarse" : "Iniciar Sesión";
             TextoAlternativo = value ? "¿Ya tienes cuenta? Inicia sesión" : "¿No tienes cuenta? Regístrate aquí";
+            esNoRegistro = !value;
         }
 
         [ObservableProperty]
@@ -123,6 +127,13 @@ namespace InversionEnPozo.Movil.VistasModelos
         [RelayCommand]
         private async Task AutenticarBiometricoAsync()
         {
+            // 1. Validar que los campos de texto no estén vacíos antes de usar la huella
+            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            {
+                await Shell.Current.DisplayAlert("Atención", "Por favor ingresa tu correo y contraseña para autenticarte con huella.", "OK");
+                return;
+            }
+
             try
             {
                 IsBusy = true;
@@ -131,18 +142,29 @@ namespace InversionEnPozo.Movil.VistasModelos
                 var request = new AuthenticationRequest
                 {
                     Title = "Acceso Biométrico",
-                    Subtitle = "Coloca tu huella para ingresar a Inversión en Pozo",
+                    Subtitle = "Coloca tu huella para confirmar tu identidad",
                     Description = "Verificación de identidad",
                     NegativeText = "Cancelar"
                 };
 
+                // 2. Validar la huella digital en el dispositivo
                 var result = await BiometricAuthenticationService.Default.AuthenticateAsync(request, CancellationToken.None);
 
-                // Validación corregida usando BiometricResponseStatus.Success
                 if (result.Status == BiometricResponseStatus.Success)
                 {
-                    string rolGuardado = await SecureStorage.GetAsync("rol_usuario") ?? "Inversionista";
-                    await ProcesarIngresoExitosoAsync(rolGuardado);
+                    // 3. Con la huella aprobada, autenticamos contra la API usando las credenciales ingresadas
+                    var resultadoApi = await _authService.LoginAsync(Email, Password);
+
+                    if (resultadoApi.Exito)
+                    {
+                        await SecureStorage.SetAsync("rol_usuario", resultadoApi.Rol);
+                        await ProcesarIngresoExitosoAsync(resultadoApi.Rol);
+                    }
+                    else
+                    {
+                        // Si la API está apagada o las credenciales son incorrectas, se muestra el error y NO se entra
+                        await Shell.Current.DisplayAlert("Acceso Denegado", resultadoApi.Mensaje, "OK");
+                    }
                 }
                 else
                 {
@@ -151,7 +173,7 @@ namespace InversionEnPozo.Movil.VistasModelos
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Ocurrió un error biométrico: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
             }
             finally
             {
